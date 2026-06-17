@@ -1,7 +1,7 @@
 import os
 import sys
 import time
-import datetime
+from datetime import datetime
 
 import tkinter as tk
 from tkinter import ttk
@@ -10,15 +10,21 @@ import openpyxl
 from openpyxl import *
 from openpyxl.styles import *
 
+from Check_Stations import *
+
 root = tk.Tk()
 
 version = 'v0.1 06/2026'
 
-path = 'E:/OneDrive/Ryvear/Ryvear_Galaxy/Data'
+now = datetime.now()
+current_time = now.strftime("%m/%d/%y %H:%M")
+print(current_time)
 
 class MainScreen(ttk.Frame):
     def __init__(self):
         ttk.Frame.__init__(self, root)
+        datetime_label = tk.Label(root, text = current_time, font = ("Arial", 8), width = 20, height = 1)
+        datetime_label.place(x = 5, y = 175)
         version_label = tk.Label(root, text = version, font = ("Arial", 8), width = 20, height = 1)
         version_label.place(x = 275, y = 175)
         self.Make_Screen()
@@ -82,7 +88,7 @@ class MainScreen(ttk.Frame):
         exit_button.place(x = 265, y = 140)
 
     def AddStation(self):
-        print('AddStation')
+        Check_Station()
 
     def DelStation(self):
         print('DelStation')
