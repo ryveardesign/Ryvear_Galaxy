@@ -16,7 +16,7 @@ from serial.tools import list_ports
 
 ports = serial.tools.list_ports.comports()
 
-class Check_Station:
+class Add_Station:
     def __init__(self):
         self.Comport_Search()
 

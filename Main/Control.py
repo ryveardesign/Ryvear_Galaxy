@@ -11,6 +11,10 @@ from openpyxl import *
 from openpyxl.styles import *
 
 from Check_Stations import *
+from Del_Station import *
+from Add_Station import *
+from Data_Capture import *
+from Main import station_directory
 
 root = tk.Tk()
 
@@ -24,30 +28,28 @@ class MainScreen(ttk.Frame):
     def __init__(self):
         ttk.Frame.__init__(self, root)
         datetime_label = tk.Label(root, text = current_time, font = ("Arial", 8), width = 20, height = 1)
-        datetime_label.place(x = 5, y = 175)
+        datetime_label.place(x = 175, y = 10)
         version_label = tk.Label(root, text = version, font = ("Arial", 8), width = 20, height = 1)
-        version_label.place(x = 275, y = 175)
+        version_label.place(x = 0, y = 10)
         self.Make_Screen()
 
     def Make_Screen(self):
         self.winfo_toplevel().title("Ryvear Main Page")
         system_color = root.cget('bg')
         root.configure(background=system_color)
-        root.geometry("400x200+50+50")
+        root.geometry("300x50+50+50")
         self.pack()
 
         menubar = tk.Menu(root)
         station_menu = tk.Menu(menubar, tearoff = 0)
         station_menu.add_command(label = "Add Station", command = self.AddStation)
         station_menu.add_command(label = "Remove Station", command = self.DelStation)
-        station_menu.add_separator()
-        station_menu.add_command(label = "Exit", command = root.quit)
         menubar.add_cascade(label = "Station", menu=station_menu)
 
         data_capture_menu = tk.Menu(menubar, tearoff = 0)
-        data_capture_menu.add_command(label = "Select Station", command = self.DataCapture)
-        data_capture_menu.add_command(label = "Select By Type", command = self.DataCapture)
-        data_capture_menu.add_command(label = "Select By Location", command = self.DataCapture)
+        data_capture_menu.add_command(label = "Select Station", command = lambda:self.DataCapture(1))
+        data_capture_menu.add_command(label = "Select By Type", command = lambda:self.DataCapture(2))
+        data_capture_menu.add_command(label = "Select By Location", command = lambda:self.DataCapture(3))
         menubar.add_cascade(label = "Data Capture", menu=data_capture_menu)
 
         data_review_menu = tk.Menu(menubar, tearoff = 0)
@@ -63,38 +65,26 @@ class MainScreen(ttk.Frame):
         help_menu.add_command(label = "Version Information", command = self.Version)
         help_menu.add_command(label = "Contact Information", command = self.Contact)
         menubar.add_cascade(label = "Help", menu = help_menu)
+
+        quit_menu = tk.Menu(menubar, tearoff=0)
+        quit_menu.add_command(label = "Quit", command = self.Exit)
+        menubar.add_cascade(label = "Quit", menu = quit_menu)
+
         root.config(menu = menubar)
 
-        # Combobox
-        sel_stationVar = tk.StringVar()
-        sel_station = ttk.Combobox(root, width = 50, height = 1, textvariable = sel_stationVar)
-        sel_station.place(x = 35, y = 50)
-        # Adding combobox drop down list
-
-        sel_station['values'] = (
-            '',
-            'Individual Stations',
-            'Stations By Type',
-            'Stations By Location',
-        )
-
-        refresh_button = (tk.Button(root, text = "Refresh", command = self.RefreshStationData, height = 1, width = 12))
-        refresh_button.place(x = 35, y = 140)
-
-        view_data_button = (tk.Button(root, text = "View Data", command = self.ViewStationData, height = 1, width = 12))
-        view_data_button.place(x = 150, y = 140)
-
-        exit_button = (tk.Button(root, text = "Exit", command = root.destroy, height = 1, width = 12))
-        exit_button.place(x = 265, y = 140)
-
     def AddStation(self):
-        Check_Station()
+        Add_Station()
 
     def DelStation(self):
-        print('DelStation')
+        Del_Station()
 
-    def DataCapture(self):
-        print('DataCapture')
+    def DataCapture(self, data_type):
+        if data_type == 1:
+            Single_View()
+        elif data_type == 2:
+            Type_View()
+        else:
+            Location_View()
 
     def DataStore(self):
         print('DataStore')
@@ -119,6 +109,9 @@ class MainScreen(ttk.Frame):
 
     def ViewStationData(self):
         print('ViewStationData')
+
+    def Exit(self):
+        print('Exit')
 
 app = MainScreen()
 root.mainloop()

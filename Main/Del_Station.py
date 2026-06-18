@@ -8,11 +8,18 @@ import openpyxl
 from openpyxl import *
 from openpyxl.styles import *
 
-path = 'E:/OneDrive/Ryvear/Ryvear_Galaxy/Data/Stations.xlsx'  # set where workbook to be used is
+from Main import station_data # Import to be able to read station_data variable
 
 class Del_Station():
     def __init__(self):
-        pass
+        self.Remove_Station()
 
     def Remove_Station(self):
-        pass
+        wb = openpyxl.load_workbook(station_data)
+        ws = wb.active
+        rows = ws.max_row
+        cols = ws.max_column
+        print(rows, cols)
+
+
+

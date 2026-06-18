@@ -5,22 +5,23 @@ import platform
 from datetime import datetime
 
 import openpyxl
-import pytz
 
 from openpyxl import *
 from openpyxl.styles import *
 
-from Control import MainScreen
+import Control
 
-global file_directories # create Global variable for other code to use when writing to associated data files
+version = 'v0.1 06/2026'
+
+now = datetime.now()
+current_time = now.strftime("%m/%d/%y %H:%M")
+print(current_time)
 
 #### Check OS being used and change storage directory accordingly (Future use)
 os_name = platform.system()
 
 #### Create Filename
-now = datetime.now()
-current_time = now.strftime("%m-%d-%y-%H-%M")
-file = f'StationDatabase-Rev-{current_time}.xlsx'
+file = f'Station_Database.xlsx'
 
 #### Set path to Home directory
 home_path = Path.home()
@@ -31,7 +32,7 @@ report_file_directory = f'{home_path}\\Ryvear_Galaxy\\Report\\'
 
 #### Join Directory and Filename
 station_directory = os.path.join(station_info_directory, file)
-print(station_directory)
+station_data = station_directory
 
 #### Verify storage directories exist and if not create
 if os.path.exists(station_info_directory): # if station information directory exists do nothing
@@ -46,32 +47,29 @@ else:
     wb = Workbook() # create file
     ws = wb.active  # Set Active Sheet
     # Creating a workbook titles
-    ws['A1'] = 'Controller Type'
-    ws['B1'] = 'Controller Version'
-    ws['C1'] = 'Controller Address'
-    ws['D1'] = 'Controller Location'
-    ws['E1'] = 'Controller Data #1'
-    ws['F1'] = 'Controller Data #2'
-    ws['G1'] = 'Controller Data #3'
-    ws['H1'] = 'Controller Data #4'
-    ws['I1'] = 'Controller Data #5'
-    ws['J1'] = 'Controller Data #6'
-    ws['K1'] = 'Controller Data #7'
-    ws['L1'] = 'Controller Data #8'
-    ws['M1'] = 'Controller Data #9'
-    ws['N1'] = 'Controller Data #10'
+    ws['A1'] = 'Controller Type' # ESP32 type, STM32 type, or Microchip type
+    ws['B1'] = 'Controller Version' # station firmware version
+    ws['C1'] = 'Controller Address' # Comport, wifi, ble, or usb
+    ws['D1'] = 'Controller Location' # Where is station located in the system
+    ws['E1'] = 'Controller Type' # Station Version (Analog, Digital, Camera, Sensors)
+    ws['F1'] = 'Station Added' # Date station added
+    ws['G1'] = 'Station Removed' # Date removed maintained for history
 
-#### Set row 1 titles alignment, font, and style, borders
-for letter in ['A','B','C','D','E','F','G','H','J','I','K','L','M','N']:
-    max_width = 24
-    for i in letter:
-        ws[f'{i}1'].alignment = Alignment(horizontal='center', vertical='center')
-        ws[f'{i}1'].font = Font(name = 'Arial', bold = True, italic = False, size = 12, color = "000000") # Change font and color
-        ws[f'{i}1'].border = Border(Side('thin'), Side('thin'), Side('thin'), Side('thin')) # Top, Left, Right, Bottom, Thick, thin, dotted, dashed
-        ws.column_dimensions[f'{letter}'].width = 28
+    #### Set row 1 titles alignment, font, and style, borders
+    for letter in ['A','B','C','D','E','F','G']:
+        max_width = 24
+        for i in letter:
+            ws[f'{i}1'].alignment = Alignment(horizontal='center', vertical='center')
+            ws[f'{i}1'].font = Font(name = 'Arial', bold = True, italic = False, size = 12, color = "000000") # Change font and color
+            ws[f'{i}1'].border = Border(Side('thin'), Side('thin'), Side('thin'), Side('thin')) # Top, Left, Right, Bottom, Thick, thin, dotted, dashed
+            ws.column_dimensions[f'{letter}'].width = 28
+        for row in range(ws.max_row):
+            ws[f'{i}1'].alignment = Alignment(horizontal='center', vertical='center')
+            ws[f'{i}1'].font = Font(name = 'Arial', bold = True, italic = False, size = 8, color = "000000") # Change font and color
+            ws[f'{i}1'].border = Border(Side('thin'), Side('thin'), Side('thin'), Side('thin')) # Top, Left, Right, Bottom, Thick, thin, dotted, dashed
 
 wb.save(station_directory) # Save data to file
 
 if __name__ == '__main__':
-    app = MainScreen()
+    app = Control.MainScreen()
     app.mainloop()
