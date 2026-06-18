@@ -1,56 +1,43 @@
-import os
-import sys
-import time
-from datetime import datetime
-
 import tkinter as tk
+from ast import Import
+
 from tkinter import ttk
 
-import openpyxl
-from openpyxl import *
-from openpyxl.styles import *
-
-from Check_Stations import *
-from Del_Station import *
-from Add_Station import *
-from Data_Capture import *
-from Main import station_directory
+from Main import current_time, version
+from InstallStation import Add_Station
+from RemoveStation import Del_Station
+from CaptureData import Single_View, Type_View, Location_View
 
 root = tk.Tk()
+main_window = tk.Toplevel(root)
 
-version = 'v0.1 06/2026'
-
-now = datetime.now()
-current_time = now.strftime("%m/%d/%y %H:%M")
-print(current_time)
-
-class MainScreen(ttk.Frame):
+class MainScreen():
     def __init__(self):
-        ttk.Frame.__init__(self, root)
-        datetime_label = tk.Label(root, text = current_time, font = ("Arial", 8), width = 20, height = 1)
+        main_window = tk.Toplevel(root)
+        datetime_label = tk.Label(main_window, text = current_time, font = ("Arial", 8), width = 20, height = 1)
         datetime_label.place(x = 175, y = 10)
-        version_label = tk.Label(root, text = version, font = ("Arial", 8), width = 20, height = 1)
+        version_label = tk.Label(main_window, text = version, font = ("Arial", 8), width = 20, height = 1)
         version_label.place(x = 0, y = 10)
         self.Make_Screen()
 
     def Make_Screen(self):
-        self.winfo_toplevel().title("Ryvear Main Page")
-        system_color = root.cget('bg')
-        root.configure(background=system_color)
-        root.geometry("300x50+50+50")
-        self.pack()
+        main_window.title("Ryvear Main Page")
+        system_color = main_window.cget('bg')
+        main_window.configure(background=system_color)
+        main_window.geometry("300x50+50+50")
+        root.pack()
 
-        menubar = tk.Menu(root)
+        menubar = tk.Menu(main_window)
         station_menu = tk.Menu(menubar, tearoff = 0)
         station_menu.add_command(label = "Add Station", command = self.AddStation)
         station_menu.add_command(label = "Remove Station", command = self.DelStation)
-        menubar.add_cascade(label = "Station", menu=station_menu)
+        menubar.add_cascade(label = "Station", menu = station_menu)
 
         data_capture_menu = tk.Menu(menubar, tearoff = 0)
         data_capture_menu.add_command(label = "Select Station", command = lambda:self.DataCapture(1))
         data_capture_menu.add_command(label = "Select By Type", command = lambda:self.DataCapture(2))
         data_capture_menu.add_command(label = "Select By Location", command = lambda:self.DataCapture(3))
-        menubar.add_cascade(label = "Data Capture", menu=data_capture_menu)
+        menubar.add_cascade(label = "Data Capture", menu = data_capture_menu)
 
         data_review_menu = tk.Menu(menubar, tearoff = 0)
         data_review_menu.add_command(label = "Station History", command = self.DataStore)
@@ -113,5 +100,5 @@ class MainScreen(ttk.Frame):
     def Exit(self):
         print('Exit')
 
-app = MainScreen()
-root.mainloop()
+#app = MainScreen()
+main_window.mainloop()

@@ -8,9 +8,7 @@ import openpyxl
 from openpyxl import *
 from openpyxl.styles import *
 
-from Main import version
-from Main import current_time
-from Main import station_directory
+from Main import station_directory, current_time, version
 
 root = tk.Tk()
 
@@ -30,9 +28,9 @@ def initialize_capture_window():
         root.configure(background=system_color)
         root.geometry("600x50+50+50")
 
-class Single_View():
+def Single_View():
     pass
-class Type_View:
+def Type_View():
     pass
-class Location_Store():
+def Location_View():
     pass
